@@ -8,7 +8,6 @@ import org.springframework.core.env.Environment;
 import java.util.Set;
 
 @Configuration
-@PropertySource("classpath:application.properties")
 public class BigCorpApplicationConfig {
 
     @Autowired
