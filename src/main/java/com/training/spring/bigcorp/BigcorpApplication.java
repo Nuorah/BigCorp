@@ -1,13 +1,15 @@
 package com.training.spring.bigcorp;
 
 import com.training.spring.bigcorp.config.properties.BigCorpApplicationProperties;
+import com.training.spring.bigcorp.model.Captor;
+import com.training.spring.bigcorp.repository.CaptorDao;
+import com.training.spring.bigcorp.service.CaptorService;
 import com.training.spring.bigcorp.service.SiteService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 public class BigcorpApplication {
@@ -22,6 +24,8 @@ public class BigcorpApplication {
 		logger.info("Application [" + bigCorpApplicationProperties.getName() + "] - version: " + bigCorpApplicationProperties.getVersion());
 		logger.info("plus d'informations sur " + bigCorpApplicationProperties.getWebSiteUrl());
 		logger.info("========================================================================");
-		context.getBean(SiteService.class).findById("test");
+		context.getBean(SiteService.class).findById("site1");
+		logger.info(context.getBean(CaptorService.class).findBySite("site2").toString());
+		logger.info(context.getBean(CaptorService.class).findBySite("site1").toString());
 	}
 }

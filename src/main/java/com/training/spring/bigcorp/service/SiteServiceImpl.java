@@ -2,6 +2,7 @@ package com.training.spring.bigcorp.service;
 
 import com.training.spring.bigcorp.config.Monitored;
 import com.training.spring.bigcorp.model.Site;
+import com.training.spring.bigcorp.repository.SiteDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ public class SiteServiceImpl implements SiteService {
     @Autowired
     private ResourceLoader resourceLoader;
 
+    @Autowired
+    private SiteDao dao;
 
     private CaptorService captorService;
 
@@ -37,25 +40,10 @@ public class SiteServiceImpl implements SiteService {
             return null;
         }
 
-        Site site = new Site("Florange");
-        site.setId(siteId);
-        site.setCaptors(captorService.findBySite(siteId));
+        Site site = dao.findById(siteId);
         return site;
     }
 
-    @Override
-    public void readFile(String path) {
-        Resource resource = resourceLoader.getResource(path);
-
-        try(InputStream stream = resource.getInputStream()){
-            Scanner scanner = new Scanner(stream).useDelimiter("\\n");
-            while(scanner.hasNext()){
-                System.out.println(scanner.next());
-            }
-        } catch (IOException e){
-            logger.error("Erreur sur chargement fichier", e);
-        }
-    }
 
     public void setResourceLoader(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
