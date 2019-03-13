@@ -9,7 +9,8 @@ import java.time.Instant;
 
 @Component
 public class H2DateConverter implements Converter<String, Instant> {
-    private static SimpleDateFormat H2_INSTANT_FORMAT = new SimpleDateFormat("yyyy-MMdd HH:mm:ssX");
+    private static SimpleDateFormat H2_INSTANT_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ssX");
+
     @Override
     public Instant convert(String source) {
         try {

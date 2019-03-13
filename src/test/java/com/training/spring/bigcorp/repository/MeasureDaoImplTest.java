@@ -38,7 +38,11 @@ public class MeasureDaoImplTest {
     @Test
     public void findById() {
         Measure measure = measureDao.findById("1");
+        Assertions.assertThat(measure.getId()).isEqualTo(1L);
+        Assertions.assertThat(measure.getInstant()).isEqualTo(Instant.parse("2018-08-09T11:00:00.000Z"));
+        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(1_000_000);
         Assertions.assertThat(measure.getCaptor().getName()).isEqualTo("Eolienne");
+        Assertions.assertThat(measure.getCaptor().getSite().getName()).isEqualTo("Bigcorp Lyon");
     }
 
     @Test
@@ -71,22 +75,18 @@ public class MeasureDaoImplTest {
     @Test
     public void update() {
         Measure measure = measureDao.findById("1");
-        Assertions.assertThat(measure.getCaptor().getName()).isEqualTo("Eolienne");
-        Captor newCaptor = new Captor("Laminoire à chaud", site);
-        newCaptor.setId("c2");
-        measure.setCaptor(newCaptor);
+        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(1_000_000);
+        measure.setValueInWatt(2_333_666);
         measureDao.update(measure);
         measure = measureDao.findById("1");
-        Assertions.assertThat(measure.getCaptor().getName()).isEqualTo("Laminoire à chaud");
+        Assertions.assertThat(measure.getValueInWatt()).isEqualTo(2_333_666);
     }
 
     @Test
     public void deleteById() {
-        Measure newMeasure = new Measure(Instant.now(),1, captor);
-        measureDao.create(newMeasure);
-        Assertions.assertThat(measureDao.findById("12")).isNotNull();
-        measureDao.deleteById("12");
-        Assertions.assertThat(measureDao.findById("12")).isNull();
+        Assertions.assertThat(measureDao.findAll()).hasSize(10);
+        measureDao.deleteById("1");
+        Assertions.assertThat(measureDao.findAll()).hasSize(9);
     }
 
 }

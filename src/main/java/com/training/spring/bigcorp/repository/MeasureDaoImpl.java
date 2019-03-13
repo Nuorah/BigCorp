@@ -36,6 +36,8 @@ public class MeasureDaoImpl implements MeasureDao {
         site.setId(rs.getString("site_id"));
         Captor captor = new Captor(rs.getString("captor_name"), site);
         captor.setId(rs.getString("captor_id"));
+        System.out.println(rs.getString("instant"));
+        System.out.println(h2DateConverter.convert(rs.getString("instant")));
         Measure measure = new Measure(h2DateConverter.convert(rs.getString("instant")),
                 rs.getInt("value_in_watt"),
                 captor);
@@ -57,12 +59,10 @@ public class MeasureDaoImpl implements MeasureDao {
     @Override
     public Measure findById(String id) {
         try {
-            Measure foundMeasure = jdbcTemplate.queryForObject(SELECT_WITH_JOIN + " Where m.id = :id",
+            return jdbcTemplate.queryForObject(SELECT_WITH_JOIN + " Where m.id = :id",
                     new MapSqlParameterSource()
                             .addValue("id", id),
                     this::measureMapper);
-            foundMeasure.setId(Long.parseLong(id));
-            return foundMeasure;
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
