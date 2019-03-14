@@ -1,8 +1,8 @@
 package com.training.spring.bigcorp.repository;
 
 import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.Measure;
-import com.training.spring.bigcorp.model.PowerSource;
+import com.training.spring.bigcorp.model.FixedCaptor;
+import com.training.spring.bigcorp.model.RealCaptor;
 import com.training.spring.bigcorp.model.Site;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
@@ -20,8 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceException;
-
-import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -50,7 +48,6 @@ public class CaptorDaoImplTest {
         Optional<Captor> captor = captorDao.findById("c1");
         Assertions.assertThat(captor.get().getId()).isEqualTo("c1");
         Assertions.assertThat(captor.get().getName()).isEqualTo("Eolienne");
-        Assertions.assertThat(captor.get().getPowerSource()).isEqualTo(PowerSource.SIMULATED);
         Assertions.assertThat(captor.get().getSite().getId()).isEqualTo("site1");
         Assertions.assertThat(captor.get().getSite().getName()).isEqualTo("Bigcorp Lyon");
     }
@@ -70,8 +67,7 @@ public class CaptorDaoImplTest {
     @Test
     public void create() {
         Assertions.assertThat(captorDao.findAll()).hasSize(2);
-        Captor captor = new Captor("New captor", this.site);
-        captor.setPowerSource(PowerSource.SIMULATED);
+        Captor captor = new RealCaptor("New captor", this.site);
         captorDao.save(captor);
 
         Assertions.assertThat(captorDao.findAll())
@@ -92,7 +88,7 @@ public class CaptorDaoImplTest {
 
     @Test
     public void deleteById() {
-        Captor captor = new Captor("New Captor", site);
+        Captor captor = new RealCaptor("New Captor", site);
         captor.setId("c3");
         em.persist(captor);
         Assertions.assertThat(captorDao.findAll()).hasSize(3);
@@ -118,8 +114,8 @@ public class CaptorDaoImplTest {
                 .withMatcher("name", match -> match.contains())
                 .withIgnorePaths("id")
                 .withIgnoreNullValues();
-        Captor captor = new Captor();
-        captor.setName("Eolienne");
+        Captor captor = new FixedCaptor("Eolienne", site);
+        //captor.setName("Eolienne");
         List<Captor> captors = captorDao.findAll(Example.of(captor, matcher));
         Assertions.assertThat(captors)
                 .hasSize(1)

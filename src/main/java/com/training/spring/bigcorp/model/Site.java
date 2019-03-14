@@ -7,21 +7,15 @@ import java.util.UUID;
 
 @Entity
 public class Site {
-    /**
-     * Site id
-     */
+
     @Id
     private String id = UUID.randomUUID().toString();
 
-    /**
-     * Site name
-     */
+
     @Column(nullable = false)
     private String name;
 
-    /**
-     * Site captors
-     */
+    
     @OneToMany(mappedBy = "site")
     private Set<Captor> captors;
 
