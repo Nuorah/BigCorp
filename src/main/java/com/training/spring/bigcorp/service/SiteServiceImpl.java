@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Optional;
 import java.util.Scanner;
 
 @Service
@@ -40,8 +41,8 @@ public class SiteServiceImpl implements SiteService {
             return null;
         }
 
-        Site site = dao.findById(siteId);
-        return site;
+        Optional<Site> site = dao.findById(siteId);
+        return site.get();
     }
 
 
