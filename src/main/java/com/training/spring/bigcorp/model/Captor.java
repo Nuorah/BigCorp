@@ -1,25 +1,33 @@
 package com.training.spring.bigcorp.model;
 
+import javax.persistence.*;
 import java.util.Objects;
 import java.util.UUID;
 
+@Entity
 public class Captor {
     /**
      * Captor id
      */
+    @Id
     private String id = UUID.randomUUID().toString();
 
     /**
      * Captor name
      */
+    @Column(nullable = false)
     private String name;
+
+    @Column
+    private Integer defaultPowerInWatt;
 
     /**
      * Captor power source
      */
-
+    @Enumerated(EnumType.STRING)
     private PowerSource powerSource;
 
+    @ManyToOne(optional = false)
     private Site site;
 
     public Site getSite() {
@@ -30,9 +38,8 @@ public class Captor {
         this.site = site;
     }
 
-    @Deprecated
+
     public Captor() {
-        // Use for serializer or deserializer
     }
 
     /**
@@ -70,13 +77,12 @@ public class Captor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Captor site = (Captor) o;
-        return Objects.equals(name, site.name);
+        return Objects.equals(id, site.id);
     }
 
     @Override
     public int hashCode() {
-
-        return Objects.hash(name);
+        return Objects.hash(id);
     }
 
     @Override

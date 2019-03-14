@@ -48,4 +48,5 @@ public class SiteServiceImpl implements SiteService {
     public void setResourceLoader(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
+
 }

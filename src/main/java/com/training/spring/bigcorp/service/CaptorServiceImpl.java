@@ -3,16 +3,11 @@ package com.training.spring.bigcorp.service;
 import com.training.spring.bigcorp.config.Monitored;
 import com.training.spring.bigcorp.model.Captor;
 import com.training.spring.bigcorp.model.Measure;
-import com.training.spring.bigcorp.model.Site;
 import com.training.spring.bigcorp.repository.CaptorDao;
-import com.training.spring.bigcorp.repository.CaptorDaoImpl;
-import com.training.spring.bigcorp.repository.CrudDao;
 import com.training.spring.bigcorp.service.measure.MeasureService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -44,6 +39,5 @@ public class CaptorServiceImpl implements CaptorService {
     public Set<Measure> readMeasure(String siteId) {
         return null;
     }
-
 
 }
