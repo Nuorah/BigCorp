@@ -10,8 +10,10 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import javax.persistence.EntityManager;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -23,6 +25,9 @@ public class MeasureDaoImplTest {
 
     @Autowired
     private MeasureDao measureDao;
+
+    @Autowired
+    private EntityManager em;
 
     @Test
     public void findById() {
@@ -65,5 +70,25 @@ public class MeasureDaoImplTest {
         Assertions.assertThat(measureDao.findAll()).hasSize(10);
         measureDao.delete(measureDao.findById(-1L).get());
         Assertions.assertThat(measureDao.findAll()).hasSize(9);
+    }
+
+    @Test
+    public void preventConcurrentWrite() {
+        Measure measure = measureDao.getOne(-1L);
+        // A la base le numéro de version est à sa valeur initiale
+        Assertions.assertThat(measure.getVersion()).isEqualTo(0);
+        // On detache cet objet du contexte de persistence
+        em.detach(measure);
+        measure.setValueInWatt(1);
+        // On force la mise à jour en base (via le flush) et on vérifie que l'objet retourné
+        // et attaché à la session a été mis à jour
+        Measure attachedMeasure = measureDao.save(measure);
+        em.flush();
+        Assertions.assertThat(attachedMeasure.getValueInWatt()).isEqualTo(1);
+        Assertions.assertThat(attachedMeasure.getVersion()).isEqualTo(1);
+        // Si maintenant je réessaie d'enregistrer captor, comme le numéro de version est
+        // à 0 je dois avoir une exception
+        Assertions.assertThatThrownBy(() -> measureDao.save(measure))
+                .isExactlyInstanceOf(ObjectOptimisticLockingFailureException.class);
     }
 }

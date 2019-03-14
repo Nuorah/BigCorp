@@ -1,6 +1,8 @@
 package com.training.spring.bigcorp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -14,7 +16,8 @@ public abstract class Captor {
     @Version
     private int version;
 
-    @Column(nullable = false)
+    @NotNull
+    @Size(min = 3, max = 100)
     private String name;
 
     @ManyToOne(optional = false)
@@ -34,6 +37,14 @@ public abstract class Captor {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public String getName() {

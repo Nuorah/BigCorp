@@ -1,6 +1,9 @@
 package com.training.spring.bigcorp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import java.time.Instant;
 
 @Entity
@@ -10,10 +13,15 @@ public class Measure {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Version
+    private int version;
+
+    @NotNull
+    @Past
     private Instant instant;
 
-    @Column(nullable = false)
+    @NotNull
+    @Min(0)
     private Integer valueInWatt;
 
     @ManyToOne(optional = false)
@@ -28,6 +36,22 @@ public class Measure {
         this.instant = instant;
         this.valueInWatt = valueInWatt;
         this.captor = captor;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public int getVersion() {
+        return version;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
     }
 
     public Instant getInstant() {
@@ -52,14 +76,6 @@ public class Measure {
 
     public void setCaptor(Captor captor) {
         this.captor = captor;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     @Override
