@@ -1,9 +1,6 @@
 package com.training.spring.bigcorp.repository;
 
-import com.training.spring.bigcorp.model.Captor;
-import com.training.spring.bigcorp.model.FixedCaptor;
-import com.training.spring.bigcorp.model.RealCaptor;
-import com.training.spring.bigcorp.model.Site;
+import com.training.spring.bigcorp.model.*;
 import org.assertj.core.api.Assertions;
 import org.assertj.core.groups.Tuple;
 import org.hibernate.exception.ConstraintViolationException;
@@ -78,6 +75,27 @@ public class CaptorDaoImplTest {
     }
 
     @Test
+    public void createShouldThrowExceptionWhenNameIsNull() {
+        Assertions
+                .assertThatThrownBy(() -> {
+                    captorDao.save(new RealCaptor(null, site));
+                    em.flush();
+                })
+                .isExactlyInstanceOf(javax.validation.ConstraintViolationException.class)
+                .hasMessageContaining("ne peut pas être nul");
+    }
+    @Test
+    public void createShouldThrowExceptionWhenNameSizeIsInvalid() {
+        Assertions
+                .assertThatThrownBy(() -> {
+                    captorDao.save(new RealCaptor("ee", site));
+                    em.flush();
+                })
+                .isExactlyInstanceOf(javax.validation.ConstraintViolationException.class)
+                .hasMessageContaining("la taille doit être comprise entre 3 et 100");
+    }
+
+    @Test
     public void update() {
         Optional<Captor> captor = captorDao.findById("c1");
         Assertions.assertThat(captor.get().getName()).isEqualTo("Eolienne");
@@ -98,6 +116,17 @@ public class CaptorDaoImplTest {
     }
 
     @Test
+    public void createSimulatedCaptorShouldThrowExceptionWhenMinMaxAreInvalid() {
+        Assertions
+                .assertThatThrownBy(() -> {
+                    captorDao.save(new SimulatedCaptor("Mon site", site, 10, 5));
+                    em.flush();
+                })
+                .isExactlyInstanceOf(javax.validation.ConstraintViolationException.class)
+                .hasMessageContaining("minPowerInWatt should be less than maxPowerInWatt");
+    }
+
+    @Test
     public void deleteByIdShouldThrowExceptionWhenIdIsUsedAsForeignKey() {
         Optional<Captor> captor = captorDao.findById("c1");
         Assertions
@@ -108,6 +137,8 @@ public class CaptorDaoImplTest {
                 .isExactlyInstanceOf(PersistenceException.class)
                 .hasCauseExactlyInstanceOf(ConstraintViolationException.class);
     }
+
+
 
     @Test
     public void findByExample() {

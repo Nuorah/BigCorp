@@ -24,8 +24,10 @@ public class SimulatedCaptor extends Captor {
 
     }
 
-    public SimulatedCaptor(String name, Site site){
+    public SimulatedCaptor(String name, Site site, Integer minPowerInWatt, Integer maxPowerInWatt){
         super(name, site);
+        this.minPowerInWatt = minPowerInWatt;
+        this.maxPowerInWatt = maxPowerInWatt;
     }
 
     @AssertTrue(message = "minPowerInWatt should be less than maxPowerInWatt")
