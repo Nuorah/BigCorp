@@ -17,6 +17,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import java.util.List;
 import java.util.Optional;
@@ -29,6 +30,12 @@ public class CaptorDaoImplTest {
 
     @Autowired
     private CaptorDao captorDao;
+
+    @Autowired
+    private MeasureDao measureDao;
+
+    @Autowired
+    private SiteDao siteDao;
 
     @Autowired
     private EntityManager em;
@@ -116,6 +123,15 @@ public class CaptorDaoImplTest {
     }
 
     @Test
+    public void deleteBySiteId() {
+        Assertions.assertThat(captorDao.findBySiteId("site1")).hasSize(2);
+        measureDao.deleteAll();
+        captorDao.deleteBySiteId("site1");
+        siteDao.delete(site);
+        Assertions.assertThat(captorDao.findBySiteId("site1")).isEmpty();
+    }
+
+    @Test
     public void createSimulatedCaptorShouldThrowExceptionWhenMinMaxAreInvalid() {
         Assertions
                 .assertThatThrownBy(() -> {
@@ -146,7 +162,7 @@ public class CaptorDaoImplTest {
                 .withMatcher("name", match -> match.contains())
                 .withIgnorePaths("id")
                 .withIgnoreNullValues();
-        Captor captor = new FixedCaptor("Eolienne", site);
+        Captor captor = new FixedCaptor("Eolienne", site, null);
         //captor.setName("Eolienne");
         List<Captor> captors = captorDao.findAll(Example.of(captor, matcher));
         Assertions.assertThat(captors)

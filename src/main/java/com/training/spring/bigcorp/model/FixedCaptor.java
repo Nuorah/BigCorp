@@ -1,6 +1,5 @@
 package com.training.spring.bigcorp.model;
 
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.validation.constraints.Min;
@@ -14,12 +13,20 @@ public class FixedCaptor extends Captor {
     @Min(0)
     private Integer defaultPowerInWatt;
 
-    @Deprecated
     public FixedCaptor(){
 
     }
 
-    public FixedCaptor(String name, Site site){
-        super(name, site);
+    public FixedCaptor(String name, Site site, Integer defaultPowerInWatt){
+        super(name, site, PowerSource.FIXED);
+        this.defaultPowerInWatt = defaultPowerInWatt;
+    }
+
+    public Integer getDefaultPowerInWatt() {
+        return defaultPowerInWatt;
+    }
+
+    public void setDefaultPowerInWatt(Integer defaultPowerInWatt) {
+        this.defaultPowerInWatt = defaultPowerInWatt;
     }
 }

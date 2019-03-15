@@ -19,15 +19,6 @@ public class BigcorpApplication {
 	private final static Logger logger = LoggerFactory.getLogger(BigcorpApplication.class);
 
 	public static void main(String[] args) {
-		ApplicationContext context = SpringApplication.run(BigcorpApplication.class,
-				args);
-		BigCorpApplicationProperties bigCorpApplicationProperties = context.getBean(BigCorpApplicationProperties.class);
-		logger.info("========================================================================");
-		logger.info("Application [" + bigCorpApplicationProperties.getName() + "] - version: " + bigCorpApplicationProperties.getVersion());
-		logger.info("plus d'informations sur " + bigCorpApplicationProperties.getWebSiteUrl());
-		logger.info("========================================================================");
-		//logger.info(context.getBean(CaptorDao.class).findAll().toString());
-		logger.info(context.getBean(CaptorService.class).findBySite("site2").toString());
-		logger.info(context.getBean(CaptorService.class).findBySite("site1").toString());
+		SpringApplication.run(BigcorpApplication.class, args);
 	}
 }

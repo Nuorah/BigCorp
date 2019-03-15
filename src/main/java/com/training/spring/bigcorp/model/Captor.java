@@ -11,7 +11,12 @@ import java.util.UUID;
 public abstract class Captor {
 
     @Id
-    private String id = UUID.randomUUID().toString();
+    private String id;
+
+    @PrePersist
+    public void generateId(){
+        this.id = UUID.randomUUID().toString();
+    }
 
     @Version
     private int version;
@@ -20,15 +25,20 @@ public abstract class Captor {
     @Size(min = 3, max = 100)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @NotNull
+    private PowerSource powerSource;
+
     @ManyToOne(optional = false)
     private Site site;
 
     public Captor() {
     }
 
-    public Captor(String name, Site site) {
+    public Captor(String name, Site site, PowerSource powerSource) {
         this.name = name;
         this.site = site;
+        this.powerSource = powerSource;
     }
 
     public String getId() {
@@ -53,6 +63,14 @@ public abstract class Captor {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public PowerSource getPowerSource() {
+        return powerSource;
+    }
+
+    public void setPowerSource(PowerSource powerSource) {
+        this.powerSource = powerSource;
     }
 
     public Site getSite() {

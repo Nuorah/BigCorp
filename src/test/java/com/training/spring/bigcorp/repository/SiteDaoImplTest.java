@@ -134,6 +134,8 @@ public class SiteDaoImplTest {
                 .hasCauseExactlyInstanceOf(ConstraintViolationException.class);
     }
 
+
+
     @Test
     public void preventConcurrentWrite() {
         Site site = siteDao.getOne("site1");
