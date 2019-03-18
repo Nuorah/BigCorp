@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.stream.Collectors;
+
 @Controller
 @Transactional
 @RequestMapping("/sites")
@@ -38,10 +40,26 @@ public class SiteController {
                         siteDao.findById(id).orElseThrow(IllegalArgumentException::new));
     }
 
+    @GetMapping("/{id}/measures")
+    public ModelAndView findMeasuresById(@PathVariable String id) {
+        Site site = siteDao.findById(id).orElseThrow(IllegalArgumentException::new);
+        // Comme les templates ont une intelligence limitée on concatène ici les id de captor dans une chaine
+        // de caractères qui pourra être exeploitée tel quelle
+        String captors = site.getCaptors()
+                .stream()
+                .map(c -> "{ id: '" + c.getId() + "', name: '" + c.getName()
+                        + "'}")
+                .collect(Collectors.joining(","));
+        return new ModelAndView("site-measures")
+                .addObject("site", site)
+                .addObject("captors", captors);
+    }
+
     @GetMapping("/create")
     public ModelAndView create(Model model) {
         return new ModelAndView("site").addObject("site", new Site());
     }
+
 
     @PostMapping(consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
     public ModelAndView save(Site site) {

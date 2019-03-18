@@ -23,7 +23,7 @@ public class RealMeasureServiceTest {
     /**
      * Captor used in tests
      */
-    private Captor captor = new RealCaptor("test", new Site());
+    private RealCaptor captor = new RealCaptor("test", new Site());
     /**
      * Start instant used in tests
      */

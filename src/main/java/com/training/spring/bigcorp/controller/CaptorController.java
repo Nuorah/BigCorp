@@ -54,6 +54,7 @@ public class CaptorController {
                 .sorted(Comparator.comparing(CaptorDto::getName))
                 .collect(Collectors.toList());
     }
+    
     @GetMapping
     public ModelAndView findAll(@PathVariable String siteId) {
         return new ModelAndView("captors")
