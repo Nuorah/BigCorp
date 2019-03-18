@@ -3,6 +3,7 @@ package com.training.spring.bigcorp.controller.dto;
 import com.training.spring.bigcorp.model.*;
 
 public class CaptorDto {
+
     private PowerSource powerSource;
     private String id;
     private String name;
@@ -11,8 +12,10 @@ public class CaptorDto {
     private Integer defaultPowerInWatt;
     private Integer minPowerInWatt;
     private Integer maxPowerInWatt;
+
     public CaptorDto() {
     }
+
     public CaptorDto(Site site, FixedCaptor fixedCaptor) {
         this.powerSource = PowerSource.FIXED;
         this.id = fixedCaptor.getId();
@@ -21,6 +24,7 @@ public class CaptorDto {
         this.siteName = site.getName();
         this.defaultPowerInWatt = fixedCaptor.getDefaultPowerInWatt();
     }
+
     public CaptorDto(Site site, SimulatedCaptor simulatedCaptor) {
         this.powerSource = PowerSource.SIMULATED;
         this.id = simulatedCaptor.getId();
@@ -30,6 +34,7 @@ public class CaptorDto {
         this.minPowerInWatt = simulatedCaptor.getMinPowerInWatt();
         this.maxPowerInWatt = simulatedCaptor.getMaxPowerInWatt();
     }
+
     public CaptorDto(Site site, RealCaptor realCaptor) {
         this.powerSource = PowerSource.REAL;
         this.id = realCaptor.getId();

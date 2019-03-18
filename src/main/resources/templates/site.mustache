@@ -9,6 +9,7 @@
     {{#site.id}}<h1>Modification site</h1>{{/site.id}}
     {{^site.id}}<h1>Création site</h1>{{/site.id}}
     <form action="/sites" method="post">
+        <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
         <div class="form-group">
             <label for="name">Nom</label>
             <input type="text" class="form-control" id="name" name="name" required
@@ -73,6 +74,7 @@
             </div>
             <div class="modal-footer">
                 <form action="/sites/{{site.id}}/delete" method="post">
+                    <input type="hidden" name="{{_csrf.parameterName}}" value="{{_csrf.token}}">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="submit" class="btn btn-danger">Supprimer</button>
                 </form>

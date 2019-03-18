@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +23,7 @@ public class SimulatedMeasureService implements MeasureService<SimulatedCaptor> 
     private RestTemplate restTemplate;
 
     public SimulatedMeasureService(RestTemplateBuilder builder) {
-        this.restTemplate = builder.setConnectTimeout(1000).build();
+        this.restTemplate = builder.setConnectTimeout(Duration.ofSeconds(1)).build();
     }
 
     @Override
